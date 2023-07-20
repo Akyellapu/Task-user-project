@@ -30,10 +30,15 @@ public class TaskController {
 	}
 
 	// get all tasks
+	/*
+	 * variable name in Get mapping i.e userId and name in PathVariable must be same i.e userId
+	 * variable name in Get mapping i.e userId and variable name in PathVariable
+	 *  may not  be the same i.e id
+	 */
 	@GetMapping("{userId}/getAllTasks")
-	public ResponseEntity<List<TaskDTO>> getAllTasks(@PathVariable(name = "userId") long userId)
+	public ResponseEntity<List<TaskDTO>> getAllTasks(@PathVariable(name = "userId") long id)
 	{
-		return new ResponseEntity<>(taskService.getAllTasks(userId),HttpStatus.OK);//status OK for Successful fetch
+		return new ResponseEntity<>(taskService.getAllTasks(id),HttpStatus.OK);//status OK for Successful fetch
 		
 	}
 	// get individual task

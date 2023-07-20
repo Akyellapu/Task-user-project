@@ -31,6 +31,7 @@ public class Task {
 	/**
 	 * to fetch less data use lazy type
 	 */
+	//referencedColumnName is the id of the user 
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="users_id",referencedColumnName="id")
 	private User users;

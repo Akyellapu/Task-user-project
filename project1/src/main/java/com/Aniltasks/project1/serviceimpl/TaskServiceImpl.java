@@ -51,7 +51,8 @@ public class TaskServiceImpl implements TaskService {
 		 * converting list of task entities into list of task DTOs
 		 */
 		// stream used to map one object to another
-		return allTaks.stream().map(task -> modelMapper.map(task, TaskDTO.class)// converting each task entity into task
+		return allTaks.stream()
+				.map(task -> modelMapper.map(task, TaskDTO.class)// converting each task entity into task
 																				// DTO
 		).collect(Collectors.toList());
 	}
