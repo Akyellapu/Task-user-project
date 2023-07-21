@@ -13,6 +13,6 @@ public interface TaskService {
 	
 	public List<TaskDTO> getAllTasks(long userId);
 	
-	public TaskDTO getIndividualUserTask(long userId, long todoId);
+	public TaskDTO getIndividualUserTask(long userId, long taskId);
 
 }

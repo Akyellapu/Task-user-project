@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.Aniltasks.project1.entities.Task;
 import com.Aniltasks.project1.entities.User;
+import com.Aniltasks.project1.exceptions.APIException;
+import com.Aniltasks.project1.exceptions.TaskNotFoundException;
 import com.Aniltasks.project1.exceptions.UserNotFoundException;
 import com.Aniltasks.project1.payload.TaskDTO;
 import com.Aniltasks.project1.repositories.TaskRepository;
@@ -55,6 +57,21 @@ public class TaskServiceImpl implements TaskService {
 				.map(task -> modelMapper.map(task, TaskDTO.class)// converting each task entity into task
 																				// DTO
 		).collect(Collectors.toList());
+	}
+
+	@Override
+	public TaskDTO getIndividualUserTask(long userId, long taskId) {
+		User newUser=userRepository.findById(userId)
+		.orElseThrow(() -> new UserNotFoundException(String.format("user Id %d not found", userId)));
+		
+		Task newTask = taskRepository.findById(taskId).orElseThrow(
+				()->new TaskNotFoundException(String.format("task id %d not found", taskId)));
+		
+		if(newUser.getId()!=newTask.getUsers().getId()) {
+			throw new APIException(String.format("task id %d is not belong to user Id %d ", taskId,userId));
+		}
+		
+		return modelMapper.map(newTask, TaskDTO.class);
 	}
 
 }
