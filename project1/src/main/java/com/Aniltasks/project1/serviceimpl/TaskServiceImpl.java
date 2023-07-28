@@ -74,4 +74,18 @@ public class TaskServiceImpl implements TaskService {
 		return modelMapper.map(newTask, TaskDTO.class);
 	}
 
+	@Override
+	public void deleteTask(long userId, long taskId) {
+		User newUser=userRepository.findById(userId)
+				.orElseThrow(() -> new UserNotFoundException(String.format("user Id %d not found", userId)));
+				
+				Task newTask = taskRepository.findById(taskId).orElseThrow(
+						()->new TaskNotFoundException(String.format("task id %d not found", taskId)));
+				
+				if(newUser.getId()!=newTask.getUsers().getId()) {
+					throw new APIException(String.format("task id %d is not belong to user Id %d ", taskId,userId));
+				}
+				taskRepository.deleteById(taskId);	
+	}
+
 }
