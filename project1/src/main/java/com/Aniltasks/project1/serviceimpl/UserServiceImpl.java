@@ -1,9 +1,10 @@
 package com.Aniltasks.project1.serviceimpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.Aniltasks.project1.entities.User;
+import com.Aniltasks.project1.entities.Users;
 import com.Aniltasks.project1.payload.UserDTO;
 import com.Aniltasks.project1.repositories.UserRepository;
 import com.Aniltasks.project1.services.UserService;
@@ -14,20 +15,27 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private  UserRepository userRepositorydetails;
 	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
 	@Override
 	public UserDTO createUser(UserDTO userdetails) {
 		/*
-		 * convert user_dto to user
+		 * authenticationManager validates the password in encoder
+		 * but we enter password normally so we have to encode the password
+		 * now authenticationManager decodes the password and validates it
 		 */
-		User userdtoToUserEntity = userdtoToUserEntity(userdetails);
-		User save = userRepositorydetails.save(userdtoToUserEntity);
+		userdetails.setPassword(passwordEncoder.encode(userdetails.getPassword()));
+		//convert user DTO to user entity
+		Users userdtoToUserEntity = userdtoToUserEntity(userdetails);
+		Users save = userRepositorydetails.save(userdtoToUserEntity);
 		return entityToUserdto(save);
 	}
 	/*
 	 * method to convert user_dto to user entity
 	 */
-	private User userdtoToUserEntity(UserDTO userdetails) {
-		User user=new User();
+	private Users userdtoToUserEntity(UserDTO userdetails) {
+		Users user=new Users();
 		user.setEmail(userdetails.getEmail());
 		user.setName(userdetails.getName());
 		user.setPassword(userdetails.getPassword());
@@ -36,7 +44,7 @@ public class UserServiceImpl implements UserService {
 	/*method to convert user_dto to user entity
 	 * 
 	 */
-	private UserDTO entityToUserdto(User userDetails) {
+	private UserDTO entityToUserdto(Users userDetails) {
 		UserDTO userDTO=new UserDTO();
 		userDTO.setId(userDetails.getId());
 		userDTO.setEmail(userDetails.getEmail());

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.Aniltasks.project1.entities.Task;
-import com.Aniltasks.project1.entities.User;
+import com.Aniltasks.project1.entities.Users;
 import com.Aniltasks.project1.exceptions.APIException;
 import com.Aniltasks.project1.exceptions.TaskNotFoundException;
 import com.Aniltasks.project1.exceptions.UserNotFoundException;
@@ -31,7 +31,7 @@ public class TaskServiceImpl implements TaskService {
 
 	@Override
 	public TaskDTO saveTask(long userId, TaskDTO taskdto) {
-		User newUser = userRepository.findById(userId)
+		Users newUser = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException(String.format("user Id %d not found", userId)));
 		/*
 		 * convert taskDto into task entity using modelMappeer reason: for saving task
@@ -61,7 +61,7 @@ public class TaskServiceImpl implements TaskService {
 
 	@Override
 	public TaskDTO getIndividualUserTask(long userId, long taskId) {
-		User newUser=userRepository.findById(userId)
+		Users newUser=userRepository.findById(userId)
 		.orElseThrow(() -> new UserNotFoundException(String.format("user Id %d not found", userId)));
 		
 		Task newTask = taskRepository.findById(taskId).orElseThrow(
@@ -76,7 +76,7 @@ public class TaskServiceImpl implements TaskService {
 
 	@Override
 	public void deleteTask(long userId, long taskId) {
-		User newUser=userRepository.findById(userId)
+		Users newUser=userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException(String.format("user Id %d not found", userId)));
 				
 				Task newTask = taskRepository.findById(taskId).orElseThrow(

@@ -34,7 +34,7 @@ public class Task {
 	//referencedColumnName is the id of the user 
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="users_id",referencedColumnName="id")
-	private User users;
+	private Users users;
 	
 	
 	

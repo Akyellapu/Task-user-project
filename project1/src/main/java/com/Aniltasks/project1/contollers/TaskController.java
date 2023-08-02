@@ -41,7 +41,10 @@ public class TaskController {
 		return new ResponseEntity<>(taskService.getAllTasks(id), HttpStatus.OK);// status OK for Successful fetch
 
 	}
-
+	/*
+	 * @PreAuthorize(value="admin")
+	 * the person who granted role is admin can only get dataform this api
+	*/
 	// get individual task
 	@GetMapping("{userId}/getIndiviudualTask/{taskId}")
 	public ResponseEntity<TaskDTO> getIndividualTaskByUserIdAndTaskId(@PathVariable(name = "userId") long uid,
