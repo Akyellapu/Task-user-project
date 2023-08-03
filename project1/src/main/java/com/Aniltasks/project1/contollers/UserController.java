@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.Aniltasks.project1.payload.JwtAuthResponse;
 import com.Aniltasks.project1.payload.LogInUserDTo;
 import com.Aniltasks.project1.payload.UserDTO;
+import com.Aniltasks.project1.security.JwtTokenProvider;
 import com.Aniltasks.project1.services.UserService;
 
 @RestController
@@ -25,6 +27,9 @@ public class UserController {
 	
 	@Autowired
 	private AuthenticationManager authenticationManager;
+	
+	@Autowired
+	private JwtTokenProvider jwtTokenProvider;
 
 	//registering the user
 	@PostMapping("/createUser")
@@ -34,12 +39,13 @@ public class UserController {
 	
 	//login user
 	@PostMapping("/userlogin")
-	public ResponseEntity<String> loginUser(@RequestBody LogInUserDTo loginUserDto) {
+	public ResponseEntity<JwtAuthResponse> loginUser(@RequestBody LogInUserDTo loginUserDto) {
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginUserDto.getEmail(),loginUserDto.getPassword()));
-		System.out.println(authentication);
 				SecurityContextHolder.getContext().setAuthentication(authentication);
-				return new ResponseEntity<>("user login successfull",HttpStatus.OK);		
+				//getting token from generate token method in jwtTokenProvider class
+				String generateToken = jwtTokenProvider.generateToken(authentication);
+				return ResponseEntity.ok(new JwtAuthResponse(generateToken)); //return token as json object		
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.Aniltasks.project1.secutirtyconfiguration;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -9,10 +10,17 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.Aniltasks.project1.security.JwtAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
+	
+	
+	@Autowired
+	private JwtAuthenticationFilter jwtAuthenticationFilter;
 	
 	/*
 	 * authenticationManager internally validates the password in encoder
@@ -40,7 +48,7 @@ public class SecurityConfiguration {
 		.antMatchers("/api/user/**").permitAll()  //not to restrict post method with authentication
 		.anyRequest()		 // it is for authorize any request
 		.authenticated();	//after authorize authenticate the request
-		
+		http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // do verification along with toke n
 		return http.build();
 	}
 	
